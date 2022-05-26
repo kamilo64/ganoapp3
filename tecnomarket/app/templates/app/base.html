@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GANOAPP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans:ital,wght@0,700;1,400;1,700&family=Open+Sans:ital,wght@0,400;0,700;1,600&display=swap" rel="stylesheet">
+    
+    {% load static %}
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    {% block css %} 
+    {% endblock %}
+
+    <link rel="stylesheet" href="{% static 'app/css/estilo2.css' %}">
+    
+</head>
+<body>
+
+    
+    <header id="header">
+        <br><br><br>
+
+        <img class="menu" src="{% static 'app/img/menuiconwhite.png'%}" alt="menu" id="menu">
+        <div class="contenedor_logo">
+            <img  class="logo"  src="{% static 'app/img/ganoicon.png' %}" alt="logo">
+        </div>
+
+        <div>
+            
+            <nav id="nav">
+                <ul>
+                    <li>
+                        <a href="{% url 'home'%}"> <font color="black">Inicio</font>  </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'contacto'%}"><font color="black">Contacto</font></a>
+                    </li>
+                    <li><a href="{% url 'galeria'%}"><font color="black">Galería</font></a></li>
+                    {% if perms.app.add_producto %}
+                    <li>
+                        <a href="{% url 'agregar_producto' %}"><font color="black">Agregar producto</font></a>
+                    </li>
+                    {% endif %}
+                    {% if perms.app.view_producto %}
+                    <li><a href="{% url 'listar_productos' %}"><font color="black">Lista de productos</font></a></li>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                   
+                    <li>
+                        <a href="{% url 'logout'%}"><font color="black">Cerrar sesion</font></a>
+                    </li>
+                    <li>
+                        <a href="#">{{ user.username }}</a>
+                    </li>
+                    <li>
+                        {% for auth in backends.associated %}
+
+                            {% if auth.provider == 'facebook' %}
+                                <img src="{{ auth.extra_data.picture.data.url }}" alt="" width="50" height="50">
+                            {% endif %}
+
+                        {% endfor %} 
+                    </li>
+                    {% else %}
+                    <li>
+                        <a href="{% url 'login'%}"><font color="black">Iniciar sesion</font></a>
+                    </li>
+                    <li>
+                        <a href="{% url 'registro'%}"><font color="black">Registrarse</font></a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+
+        </div>
+
+    </header>
+
+    <div id="contenido">
+
+        
+
+        {% block contenido %}
+        {% endblock %}
+
+    </div>
+
+    <br><br><br>
+    
+    <footer>
+        <div class="marcas">
+            <img src="{% static 'app/img/footer/face.png'%}" alt="facebook">
+            <img src="{% static 'app/img/footer/dj.png'%}" alt="django">
+            <img src="{% static 'app/img/footer/vscode.png'%}" alt="vscode">
+            <img src="{% static 'app/img/footer/sena.png'%}" alt="sena">
+            <img src="{% static 'app/img/footer/pr.png'%}" alt="python">
+        </div>
+        <div class="logo_footer">
+            <img src="{% static 'app/img/ganoicon.png'%}" alt="logo">
+        </div>
+    </footer>
+                 <p class="copyright text-muted"><center>Copyright &copy; 2022 | GANOAPP (Tecnologos ADSI)</center> </p>
+     
+    <script src="{% static 'app/vendor/jquery/jquery.min.js'%}"></script>
+    <script src="{% static 'app/vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+    <script src="{% static 'app/js/clean-blog.min.js'%}"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  
+    <script src="{% static 'app/js/menu.js'%}"></script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {% block mensajeria %}
+    {% if messages %}
+
+            {% for m in messages %}
+                <script>
+
+                    Swal.fire({
+                        "title" : "Felicitaciones",
+                        "text" : "{{m}}",
+                        "icon" : "success"
+                    })
+
+                </script>
+            {% endfor %}
+
+    {% endif %}
+
+    {% endblock %}
+    {% block js %}
+    {% endblock %}
+</body>
+</html>
+
